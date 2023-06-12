@@ -1,14 +1,17 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
+        "Adelson",
         "cmath",
         "deque",
+        "Landis",
         "logn",
         "maxn",
         "memset",
         "multiset",
         "nlogn",
         "nums",
-        "qucik"
+        "qucik",
+        "Velsky"
     ]
 }
