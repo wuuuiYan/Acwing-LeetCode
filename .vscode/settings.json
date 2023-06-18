@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
+        "ACSII",
         "Adelson",
         "cmath",
         "deque",
@@ -12,6 +13,7 @@
         "nlogn",
         "nums",
         "qucik",
+        "strcmp",
         "Velsky"
     ]
 }
