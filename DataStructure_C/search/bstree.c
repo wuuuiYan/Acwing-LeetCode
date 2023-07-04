@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define SIZE 10
 
@@ -13,14 +14,45 @@ struct BSTree_node
 struct BSTree_node *create_bstree(unsigned int *arr, unsigned int size);
 struct BSTree_node *insert_bstree(struct BSTree_node *root, unsigned int elem);
 void in_order(struct BSTree_node *root);
+bool search_bstree(struct BSTree_node *root, unsigned int n);
+struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n);
+struct BSTree_node *getMax(struct BSTree_node *root); //获取二叉搜索树的最大节点
+struct BSTree_node *getMin(struct BSTree_node *root); //获取二叉搜索树的最小节点
 
 int main()
 {
+    unsigned int num;
     unsigned int arr[SIZE] = {37, 22, 11, 82, 67, 9, 45, 91, 33, 52};
+    
     struct BSTree_node *mytree = NULL;
+    
     mytree = create_bstree(arr, SIZE);
     in_order(mytree);
     printf("\n");
+
+    printf("Please enter a number you want to find int the BSTree: ");
+    scanf("%d", &num);
+    if (search_bstree(mytree, num))
+    {
+        printf("The number %d is in mytree.\n", num);
+    }
+    else
+    {
+        printf("The number %d is not in mytree.\n", num);
+    }
+
+    printf("Please enter a number you want to insert to the BSTree: ");
+    scanf("%d", &num);
+    mytree = insert_bstree(mytree, num);
+    in_order(mytree);
+    printf("\n");
+
+    printf("Please enter a number you want to delete from the bstree: ");
+    scanf("%d", &num);
+    mytree = delete_bstree(mytree, num);
+    in_order(mytree);
+    printf("\n");
+
     return 0;
 }
 
@@ -69,4 +101,66 @@ void in_order(struct BSTree_node *root)
     in_order(root->ltree);
     printf("%d ", root->elem);
     in_order(root->rtree);
+}
+
+bool search_bstree(struct BSTree_node *root, unsigned int n)
+{
+    if (root == NULL) return false;
+    if (root->elem == n) return true;
+    if (root->elem > n) return search_bstree(root->ltree, n);
+    if (root->elem < n) return search_bstree(root->rtree, n);
+}
+
+/*
+bool search_bstree(struct BSTree_node *root, unsigned int n)
+{
+    while (root != NULL)
+    {
+        if (root->elem == n) return true;
+        if (root->elem > n) root = root->ltree;
+        if (root->elem < n) root = root->rtree;
+    }
+    return false;
+}
+*/
+
+struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n)
+{
+    if (root == NULL || !search_bstree(root, n))
+    {
+        printf("Not exist %d node.\n", n);
+        exit(0);
+    }
+    if (root->elem == n) 
+    {
+        if (root->ltree == NULL && root->rtree == NULL)
+            return NULL;
+        if (root->ltree == NULL) return root->rtree;
+        if (root->rtree == NULL) return root->ltree;
+        // struct BSTree_node *leftMax = getMax(root->ltree);
+        // leftMax->ltree = delete_bstree(root->ltree, leftMax->elem);
+        // leftMax->rtree = root->rtree;
+        // root = leftMax;
+        struct BSTree_node *rightMin = getMin(root->rtree);
+        leftMax->ltree = root->ltree;
+        leftMax->rtree = delete_bstree(root->rtree, rightMin->elem);
+        root = rightMin;
+    }
+    if (root->elem > n) root->ltree = delete_bstree(root->ltree, n);
+    if (root->elem < n) root->rtree = delete_bstree(root->rtree, n);
+    return root;
+}
+
+struct BSTree_node *getMax(struct BSTree_node *root)
+{
+    while (root->rtree != NULL)
+        root == root->rtree;
+    return root;
+}
+
+struct BSTree_node *getMin(struct BSTree_node *root)
+{
+    while (root->ltree != NULL)
+        root == root->ltree;
+    return root;
 }
