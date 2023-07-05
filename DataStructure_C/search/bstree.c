@@ -103,6 +103,7 @@ void in_order(struct BSTree_node *root)
     in_order(root->rtree);
 }
 
+// 二叉搜索树的查找性能取决于树的高度
 bool search_bstree(struct BSTree_node *root, unsigned int n)
 {
     if (root == NULL) return false;
@@ -128,7 +129,7 @@ struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n)
 {
     if (root == NULL || !search_bstree(root, n))
     {
-        printf("Not exist %d node.\n", n);
+        printf("Not exist %d node.\n", n); //FIXME，为什么某些节点删除会提示不存在？
         exit(0);
     }
     if (root->elem == n) 
@@ -142,8 +143,8 @@ struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n)
         // leftMax->rtree = root->rtree;
         // root = leftMax;
         struct BSTree_node *rightMin = getMin(root->rtree);
-        leftMax->ltree = root->ltree;
-        leftMax->rtree = delete_bstree(root->rtree, rightMin->elem);
+        rightMin->ltree = root->ltree;
+        rightMin->rtree = delete_bstree(root->rtree, rightMin->elem);
         root = rightMin;
     }
     if (root->elem > n) root->ltree = delete_bstree(root->ltree, n);
