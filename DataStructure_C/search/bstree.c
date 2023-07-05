@@ -49,6 +49,7 @@ int main()
 
     printf("Please enter a number you want to delete from the bstree: ");
     scanf("%d", &num);
+    // num = 22;
     mytree = delete_bstree(mytree, num);
     in_order(mytree);
     printf("\n");
@@ -125,32 +126,76 @@ bool search_bstree(struct BSTree_node *root, unsigned int n)
 }
 */
 
+/*
 struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n)
 {
-    if (root == NULL || !search_bstree(root, n))
+    // if (root == NULL || !search_bstree(root, n))
+    if (root == NULL)
     {
         printf("Not exist %d node.\n", n); //FIXME，为什么某些节点删除会提示不存在？
         exit(0);
     }
     if (root->elem == n) 
     {
-        if (root->ltree == NULL && root->rtree == NULL)
-            return NULL;
+        // if (root->ltree == NULL && root->rtree == NULL)
+        //     return NULL;
         if (root->ltree == NULL) return root->rtree;
         if (root->rtree == NULL) return root->ltree;
-        // struct BSTree_node *leftMax = getMax(root->ltree);
-        // leftMax->ltree = delete_bstree(root->ltree, leftMax->elem);
-        // leftMax->rtree = root->rtree;
-        // root = leftMax;
-        struct BSTree_node *rightMin = getMin(root->rtree);
-        rightMin->ltree = root->ltree;
-        rightMin->rtree = delete_bstree(root->rtree, rightMin->elem);
-        root = rightMin;
+        struct BSTree_node *leftMax = getMax(root->ltree);
+        root->ltree= delete_bstree(root->ltree, leftMax->elem);
+        leftMax->ltree = root->ltree;
+        leftMax->rtree = root->rtree;
+        root = leftMax;
+        // struct BSTree_node *rightMin = getMin(root->rtree);
+        // root->rtree = delete_bstree(root->rtree, rightMin->elem);
+        // rightMin->ltree = root->ltree;
+        // rightMin->rtree = root->rtree;
+        // root = rightMin;
     }
     if (root->elem > n) root->ltree = delete_bstree(root->ltree, n);
     if (root->elem < n) root->rtree = delete_bstree(root->rtree, n);
+    // else root->rtree = delete_bstree(root->rtree, n);
     return root;
 }
+*/
+
+
+struct BSTree_node *delete_bstree(struct BSTree_node *root, unsigned int n)
+{
+	if(root == NULL)
+	{
+		printf("Not exist %d node.\n",	n);
+		exit(0);
+	}
+
+	// 选择后继点的元素作为替换该节点的元素
+	if(root->elem == n)
+	{
+		if(root->rtree == NULL) //当右子树为空时，直接上提左子树
+		{
+			struct BSTree_node *temp = root;
+			root = root->ltree;
+			free(temp);
+		}
+		else // 当右子树不为空时，右子树的最左节点即为该根节点的后继节点
+		{
+			struct BSTree_node *temp = root->rtree;
+			while(temp->ltree)
+				temp = temp->ltree;
+			root->elem = temp->elem;
+
+			//删除二叉搜索树中重复的节点
+			root->rtree = delete_bstree(root->rtree, root->elem);
+		}
+	}
+	else if(root->elem > n)
+		root->ltree = delete_bstree(root->ltree, n);
+	else //T->elem < elem
+		root->rtree = delete_bstree(root->rtree, n);
+
+	return root;
+}
+
 
 struct BSTree_node *getMax(struct BSTree_node *root)
 {
