@@ -29,6 +29,7 @@
         "preorder",
         "qucik",
         "Sagmentation",
+        "segs",
         "SPFA",
         "strcmp",
         "topsort",
