@@ -18,6 +18,7 @@
         "memcpy",
         "memeset",
         "memset",
+        "minp",
         "mlogm",
         "mlogn",
         "multiset",
