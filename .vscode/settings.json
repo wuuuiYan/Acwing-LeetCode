@@ -32,6 +32,7 @@
         "Sagmentation",
         "segs",
         "SPFA",
+        "stoi",
         "strcmp",
         "topsort",
         "Velsky"
